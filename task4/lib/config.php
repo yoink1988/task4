@@ -1,6 +1,7 @@
 <?php
 
-define ("ROOT" , __DIR__ . "/..");
+define ("ROOT_DIR" , __DIR__ . "/..");
+define('TEMPLATE', ROOT_DIR.'/templates/index.php');
 
 
 define ("MYSQL_HOST", "localhost");
@@ -19,7 +20,7 @@ define ("POSTGRE_TABLE_NAME", "PG_TEST");
 define ("DB_MYSQL" , 1);
 define ("DB_POSTGRE" , 2);
 
-define ("DB_DRIVER" , 1);
+define ("DB_DRIVER" , 2);
 
 define ("SUCCESS" , "SUCCESS");
 

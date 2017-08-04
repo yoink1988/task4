@@ -1,7 +1,7 @@
 <?php
 
 
-class Postgresql extends Db
+class Postgresql extends Sql
 {
 
 	private function getConnect()
@@ -11,15 +11,19 @@ class Postgresql extends Db
 			return $this->link;
 		}
 		if($this->link = pg_connect("host=".POSTGRE_HOST.
+								  ", port=".POSTGRE_PORT.
 								", dbname=".POSTGRE_DB_NAME.
 								  ", user=".POSTGRE_USER.
-							  ", password=".POSTGRE_PASS))//PORT
+							  ", password=".POSTGRE_PASS))
 		{
 			return $this->link;
 		}
 	}
 
-
+public function clearString($string)
+{
+	return pg_escape_string($string);
+}
 
 	public function exec()
 	{
@@ -28,19 +32,19 @@ class Postgresql extends Db
 		switch ($this->queryType)
 		{
 			case 'insert':
-				if(!pg_query($this->getConnect(), $this->query))
+				if(pg_query($this->getConnect(), $this->query))
 				{
-					return false;
+					return true;
 				}
-				return SUCCESS;
+				return false;
 
 			case 'update':
 				
-				if(!pg_query($this->getConnect(), $this->query))
+				if(pg_query($this->getConnect(), $this->query))
 				{
-					return false;
+					return true;
 				}
-				return SUCCESS;
+				return false;
 			case 'select':
 				
 				$result=  array();
@@ -58,24 +62,13 @@ class Postgresql extends Db
 
 				if(pg_query($this->getConnect(), $this->query))
 				{
-					return pg_affected_rows($this->getConnect()). " row deleted";
+					return true;
 				}
-				else
-				{
 					return false;
-				}
+
 		}
 
 	}
-
-
-
-
-
-
-
-
-
 
 	public function __construct(){}
 }

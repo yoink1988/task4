@@ -1,5 +1,5 @@
 <?php
-class Mysql extends Db
+class Mysql extends Sql
 {
 
 	private function getConnect()
@@ -16,6 +16,11 @@ class Mysql extends Db
 	}
 
 
+	public function clearString($string)
+	{
+		return mysql_escape_string($string);
+	}
+
 
 	public function exec()
 	{
@@ -23,60 +28,43 @@ class Mysql extends Db
 		switch ($this->queryType)
 		{
 			case 'insert':
-				if(!mysql_query($this->query, $this->getConnect()))
+				if(mysql_query($this->query, $this->getConnect()))
 				{
-					return false;
+					return true;
 				}
-				return SUCCESS;
+				return false;
 
 			case 'update':
-				if(!mysql_query($this->query, $this->getConnect()))
+				echo $this->query;
+				if(mysql_query($this->query, $this->getConnect()))
 				{
-					return false;
+					return true;
 				}
-				return SUCCESS;
+				return false;
 			case 'select':
 				$result=  array();
 				if(!$stmt = mysql_query($this->query, $this->getConnect()))
 				{
-					echo mysql_error($this->getConnect());
-					return "no data";
+					return false;
 				}
-//				$i=1;
+
 				while($res = mysql_fetch_array($stmt, MYSQL_ASSOC))
 				{
-//					$res['id'] = $i;
 					$result[]=$res;
-
-//					$i++;
 				}
 				return $result;
 
 			case 'delete':
 				if(mysql_query($this->query, $this->getConnect()))
 				{
-					return mysql_affected_rows($this->getConnect())." row deleted";
+					return true;
 				}
-				else
-				{
-					return false;
-				}
+				return false;
+
 		}
 
 	}
 			
-			
-
-	
-
-
-
-
-
-
-
-
-
 
 	public function __construct(){}
 
